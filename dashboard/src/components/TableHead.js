@@ -24,7 +24,7 @@ const TableHead = ({ columns, handleSorting }) => {
                         : "px-6 py-4";
                     return (
                         <th
-                        scope="col"
+                            scope="col"
                             key={accessor}
                             onClick={sortable ? () => handleSortingChange(accessor) : null}
                             className={cl}
