@@ -21,8 +21,8 @@ type EmployeeModel struct {
 
 func (emp EmployeeModel) Insert(employee *Employee) error {
 	query := `
-	INSERT INTO employees (name, performance)
-	VALUES ($1, $2, $d) RETURNING id, name, performance, date, created_at`
+	INSERT INTO employees (name, performance, date)
+	VALUES ($1, $2, $3) RETURNING id, name, performance, date, created_at`
 
 	args := []interface{}{employee.Name, employee.Performance, employee.Date}
 
