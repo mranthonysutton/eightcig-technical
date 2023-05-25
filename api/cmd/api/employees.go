@@ -9,7 +9,13 @@ import (
 	"github.com/mranthonysutton/eightcig-technical/api/internal/data"
 )
 
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
 func (app *application) createEmployeeHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
+
 	var input struct {
 		Name        string `json:"name"`
 		Performance int64  `json:"performance"`
@@ -50,6 +56,7 @@ func (app *application) createEmployeeHandler(w http.ResponseWriter, r *http.Req
 }
 
 func (app *application) listEmployeesHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	employees, err := app.models.Employees.GetAll()
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
@@ -63,6 +70,7 @@ func (app *application) listEmployeesHandler(w http.ResponseWriter, r *http.Requ
 }
 
 func (app *application) showEmployeesHandler(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
 	id, err := app.readIDParam(r)
 	if err != nil {
 		app.notFoundResponse(w, r)
