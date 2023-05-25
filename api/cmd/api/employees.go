@@ -7,6 +7,19 @@ import (
 	"github.com/mranthonysutton/eightcig-technical/api/internal/data"
 )
 
+func (app *application) createEmployeeHandler(w http.ResponseWriter, r *http.Request) {
+	var input struct {
+		Name        string `json:"string"`
+		Performance int64  `json:"performance"`
+	}
+
+	err := app.readJSON(w, r, &input)
+	if err != nil {
+		app.badRequestResponse(w, r, err)
+		return
+	}
+}
+
 func (app *application) listEmployeesHandler(w http.ResponseWriter, r *http.Request) {
 	employees, err := app.models.Employees.GetAll()
 	if err != nil {

@@ -22,15 +22,15 @@ type EmployeeModel struct {
 func (emp EmployeeModel) Insert(employee *Employee) error {
 	query := `
 	INSERT INTO employees (name, performance)
-	VALUES ($1, $2) RETURNING id, name, performance, created_at`
+	VALUES ($1, $2, $d) RETURNING id, name, performance, date, created_at`
 
-	args := []interface{}{employee.Name, employee.Performance}
+	args := []interface{}{employee.Name, employee.Performance, employee.Date}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 
 	defer cancel()
 
-	return emp.DB.QueryRowContext(ctx, query, args...).Scan(&employee.ID, &employee.Name, &employee.Performance, &employee.CreatedAt)
+	return emp.DB.QueryRowContext(ctx, query, args...).Scan(&employee.ID, &employee.Name, &employee.Performance, &employee.Date, &employee.CreatedAt)
 }
 
 func (emp EmployeeModel) Get(id int64) (*Employee, error) {
@@ -38,14 +38,14 @@ func (emp EmployeeModel) Get(id int64) (*Employee, error) {
 		return nil, ErrRecordNotFound
 	}
 
-	query := `SELECT id, name, performance, created_at FROM employees WHERE id = $1 LIMIT 1`
+	query := `SELECT id, name, performance, date, created_at FROM employees WHERE id = $1 LIMIT 1`
 
 	var employee Employee
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	err := emp.DB.QueryRowContext(ctx, query, id).Scan(&employee.ID, &employee.Name, &employee.Performance, &employee.CreatedAt)
+	err := emp.DB.QueryRowContext(ctx, query, id).Scan(&employee.ID, &employee.Name, &employee.Performance, &employee.Date, &employee.CreatedAt)
 
 	if err != nil {
 		switch {
@@ -60,7 +60,7 @@ func (emp EmployeeModel) Get(id int64) (*Employee, error) {
 }
 
 func (emp EmployeeModel) GetAll() ([]*Employee, error) {
-	query := `SELECT id, name, performance, created_at FROM employees ORDER BY performance DESC`
+	query := `SELECT id, name, performance, date, created_at FROM employees ORDER BY performance DESC`
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -77,7 +77,7 @@ func (emp EmployeeModel) GetAll() ([]*Employee, error) {
 	for rows.Next() {
 		var employee Employee
 
-		err := rows.Scan(&employee.ID, &employee.Name, &employee.Performance, &employee.CreatedAt)
+		err := rows.Scan(&employee.ID, &employee.Name, &employee.Performance, &employee.Date, &employee.CreatedAt)
 
 		if err != nil {
 			return nil, err
