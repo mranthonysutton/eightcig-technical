@@ -16,7 +16,7 @@ migrateup:
 migratedown:
 	./utils/migrate -path db/migration -database "postgresql://root:secret@localhost:5432/eightcig?sslmode=disable" --verbose up
 
-sqlc:
-	./utils/sqlc generate
+runapi:
+	go run ./cmd/api/
 
 .PHONY: postgres createdb dropdb migrateup migratedown installpostgres
