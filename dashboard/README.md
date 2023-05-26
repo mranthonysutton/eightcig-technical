@@ -8,6 +8,8 @@
 
 ## Running the client
 
+**For the client to display all the information, the client must be up and running**
+
 First you will need to install the dependencies:
 
 ``npm install``
